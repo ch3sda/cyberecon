@@ -59,10 +59,10 @@ disclaimer(){
 banner(){
   clear
   echo -e "${PURPLE}"
-  figlet -f slant "Cyber Toolkit" 2>/dev/null
+  figlet -f slant "Recon Toolkit" 2>/dev/null
   echo -e "${RESET}${CYAN}${BOLD}"
   echo "=============================================="
-  echo "         DARK HACKER NEON EDITION"
+  echo "           EDUCATION EDITION"
   echo "          CyberRecon by ch3sda"
   echo "=============================================="
   echo -e "${RESET}"
