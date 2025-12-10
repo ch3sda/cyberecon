@@ -2,7 +2,6 @@
 
 ################################################################################
 # CyberRecon Toolkit by ch3sda
-# Dark Hacker Neon Edition
 #
 # EDUCATIONAL USE ONLY – legal disclaimer included before execution.
 ################################################################################
@@ -16,23 +15,49 @@ RESET="\e[0m"; BOLD="\e[1m"
 
 
 #==============================
-# INSTALL CHECK
+# CHECK MISSING TOOLS FIRST
 #==============================
-check_install(){
-  command -v $1 &>/dev/null || {
-    echo -e "${YELLOW}[+] Installing $1 ...${RESET}"
-    sudo apt install -y $1
-  }
-}
 
-install_dependencies(){
-  tools=("figlet" "nmap" "gobuster" "sqlmap" "hydra" "nikto" "whatweb" "wafw00f" \
-  "dirsearch" "ffuf" "nuclei" "subfinder" "assetfinder" "whois" "dnsenum" "msfconsole")
+tools_required=(
+"figlet" "nmap" "gobuster" "sqlmap" "hydra"
+"nikto" "whatweb" "wafw00f" "dirsearch"
+"ffuf" "nuclei" "subfinder" "assetfinder"
+"whois" "dnsenum" "msfconsole"
+)
 
-  for t in "${tools[@]}"; do
-    check_install "$t"
+missing_tools=()
+
+check_missing(){
+  for tool in "${tools_required[@]}"; do
+    if ! command -v "$tool" >/dev/null 2>&1; then
+      missing_tools+=("$tool")
+    fi
   done
 }
+
+install_missing(){
+  echo -e "${CYAN}"
+  echo "Missing tools:"
+  printf '%s\n' "${missing_tools[@]}"
+  echo ""
+  read -p "Install missing tools now? [y/N]: " choose
+
+  if [[ "$choose" =~ ^[Yy]$ ]]; then
+    sudo apt update
+    sudo apt install -y "${missing_tools[@]}"
+  else
+    echo -e "${YELLOW}Skipping installation...${RESET}"
+  fi
+}
+
+
+# call before main menu:
+check_missing
+if (( ${#missing_tools[@]} )); then
+  install_missing
+else
+  echo -e "${GREEN}[✔] All tools already installed${RESET}"
+fi
 
 
 #==============================
